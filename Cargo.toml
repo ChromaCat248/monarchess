@@ -1,0 +1,8 @@
+[package]
+name = "monarchess"
+version = "0.1.0"
+edition = "2018"
+
+[dependencies]
+termion = "*"
+discord = { git = "https://github.com/SpaceManiac/discord-rs" }
