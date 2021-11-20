@@ -2,9 +2,19 @@
 // Main
 // by ChromaCat248
 
+extern crate yaml_rust;
+
 use termion::color;
+use std::fs;
+use std::env;
+use yaml_rust::YamlLoader;
 
 mod output;
+
+static CONFIG_PATH : &str = "config.yaml";
+
+pub static mut TOKEN : &str = "";
+pub static mut PREFIX : &str = "";
 
 fn main()
 {
@@ -32,8 +42,50 @@ fn main()
 	println!("");
 
 
-	output::action("Doing bot stuff");
 
+	output::action(
+			format!("Loading config from {}/{}..",
+				env::current_exe().unwrap().parent().unwrap().to_str().unwrap(),
+				CONFIG_PATH
+			).as_str()
+	);
+
+	let config_text = fs::read_to_string(
+			format!( "{}/{}",
+				env::current_exe().unwrap().parent().unwrap().to_str().unwrap(),
+				CONFIG_PATH
+			)
+	);
+
+	if config_text.is_err()
+	{
+		println!("");
+		output::error(
+				format!( "Failed to load config: {}",
+					config_text.unwrap_err()
+				).as_str()
+		);
+		println!("");
+		return;
+	}
+
+	//println!("{}", config_text.unwrap());
+
+
+	output::action("Parsing config..");
+
+	let config_arr = YamlLoader::load_from_str(config_text.unwrap().as_str()).unwrap();
+	let config = &config_arr[0];
+
+	let token = config["token"].as_str().unwrap();
+	let prefix = config["prefix"].as_str().unwrap();
+
+	output::success("Config successfully loaded.");
+
+	println!("Token: [not shown]\nPrefix: {}", prefix);
+
+	println!("");
+	output::action("Exiting");
 	println!("");
 
 }

@@ -6,3 +6,4 @@ edition = "2018"
 [dependencies]
 termion = "*"
 discord = { git = "https://github.com/SpaceManiac/discord-rs" }
+yaml-rust = "0.4.5"
