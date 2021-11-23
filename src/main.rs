@@ -2,12 +2,10 @@
 // Main
 // by ChromaCat248
 
-extern crate yaml_rust;
-
 use termion::color;
-use std::fs;
-use std::env;
+use std::{fs, env, thread, time};
 use yaml_rust::YamlLoader;
+use serenity::*;
 
 mod output;
 
@@ -15,6 +13,13 @@ static CONFIG_PATH : &str = "config.yaml";
 
 pub static mut TOKEN : &str = "";
 pub static mut PREFIX : &str = "";
+
+struct event_handler;
+impl client::EventHandler for event_handler {
+	/*fn message(&self, context: serenity::Context, message: serenity::Message) {
+		unimplemented!();
+	}*/
+}
 
 fn main()
 {
@@ -69,8 +74,6 @@ fn main()
 		return;
 	}
 
-	//println!("{}", config_text.unwrap());
-
 
 	output::action("Parsing config..");
 
@@ -83,6 +86,15 @@ fn main()
 	output::success("Config successfully loaded.");
 
 	println!("Token: [not shown]\nPrefix: {}", prefix);
+	println!("");
+
+
+	output::action("Establishing connection..");
+	let mut client = client::ClientBuilder::new(token);
+
+
+	thread::sleep( time::Duration::from_secs(10) );
+
 
 	println!("");
 	output::action("Exiting");
