@@ -80,8 +80,8 @@ fn main()
 	let config_arr = YamlLoader::load_from_str(config_text.unwrap().as_str()).unwrap();
 	let config = &config_arr[0];
 
-	let mut token : &str;
-	let mut prefix : &str;
+	let token : &str;
+	let prefix : &str;
 
 	if config["token"].as_str() != None {
 		token = config["token"].as_str().unwrap();
@@ -90,6 +90,11 @@ fn main()
 	if config["prefix"].as_str() != None {
 		prefix = config["prefix"].as_str().unwrap();
 	} else { output::error("Key \"prefix\" not found in config.yaml"); return }
+
+	if client::validate_token(token).is_err() {
+		output::error("The provided token was invalid");
+		return;
+	}
 
 	output::success("Config successfully loaded.");
 
