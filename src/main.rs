@@ -3,7 +3,8 @@
 // by ChromaCat248
 
 use termion::color;
-use std::{fs, env, thread, time};
+use futures::executor::block_on;
+use std::{fs, env};
 use yaml_rust::YamlLoader;
 use serenity::*;
 
@@ -11,14 +12,17 @@ mod output;
 
 static CONFIG_PATH : &str = "config.yaml";
 
-pub static mut TOKEN : &str = "";
-pub static mut PREFIX : &str = "";
 
-struct event_handler;
-impl client::EventHandler for event_handler {
-	/*fn message(&self, context: serenity::Context, message: serenity::Message) {
-		unimplemented!();
-	}*/
+struct EventHandler;
+#[async_trait]
+impl prelude::EventHandler for EventHandler {
+	async fn message(&self, _ctx: prelude::Context, _msg: model::channel::Message) {
+
+	}
+
+	async fn ready(&self, _ctx: prelude::Context, rdy: model::gateway::Ready) {
+		println!("{} is connected!", rdy.user.name);
+	}
 }
 
 fn main()
@@ -102,15 +106,13 @@ fn main()
 	println!("");
 
 
-	output::action("Establishing connection..");
-	let mut client = client::ClientBuilder::new(token);
+	output::action("Starting bot");
 
-
-	thread::sleep( time::Duration::from_secs(10) );
-
-
-	println!("");
-	output::action("Exiting");
-	println!("");
-
+	block_on(async {
+		let mut client = Client::builder(&token).event_handler(EventHandler).await.expect("Error creating client");
+		if let Err(why) = client.start().await {
+			println!("{}", why);
+			output::error("Client error");
+		}
+	});
 }
