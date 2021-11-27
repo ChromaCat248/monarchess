@@ -1,7 +1,9 @@
 # Monarchess Discord bot
 Project repository: https://github.com/ChromaCat248/monarchess
 
-## Run instructions
+## Compile instructions
+
+Make sure you have the Rust developer tools installed. If you don't, you can use [rustup](https://rustup.rs/) to install it.
 
 Compile.  
 ```
