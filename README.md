@@ -20,3 +20,9 @@ Edit the new file to add a bot token.
 token: "[insert bot token here]"  
 prefix: "m!"
 ```
+
+  
+Start the bot.
+```
+cargo run
+```
