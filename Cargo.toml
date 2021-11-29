@@ -6,5 +6,5 @@ edition = "2018"
 [dependencies]
 termion = "*"
 yaml-rust = "0.4.5"
-serenity = "0.10"
 futures = "0.3.18"
+serenity = { version = "0.10.9", default-features = false, features = ["builder", "cache", "client", "gateway", "model", "http", "utils", "rustls_backend"] }
